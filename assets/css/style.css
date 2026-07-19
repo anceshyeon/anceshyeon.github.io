@@ -490,33 +490,23 @@ h1, h2, h3 {
 }
 
 .hero-contact {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 11px;
+  gap: 10px;
   margin-top: 22px;
 }
 
-.hero-contact > i {
+.hero-contact i {
+  flex-shrink: 0;
   color: var(--accent);
   font-size: 16px;
-}
-
-.hero-contact-text {
-  display: flex;
-  align-items: baseline;
-  gap: 9px;
-}
-
-.hero-contact-label {
-  color: var(--text);
-  font-size: 13px;
-  font-weight: 800;
 }
 
 .hero-contact-address {
   color: var(--muted);
   font-size: 14px;
   font-weight: 500;
+  line-height: 1;
 }
 
 @media (max-width: 820px) {
