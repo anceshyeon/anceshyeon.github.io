@@ -489,6 +489,36 @@ h1, h2, h3 {
   text-align: right;
 }
 
+.hero-contact {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  margin-top: 22px;
+}
+
+.hero-contact > i {
+  color: var(--accent);
+  font-size: 16px;
+}
+
+.hero-contact-text {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+}
+
+.hero-contact-label {
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.hero-contact-address {
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 500;
+}
+
 @media (max-width: 820px) {
   .menu-button {
     display: block;
