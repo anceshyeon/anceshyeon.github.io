@@ -10,6 +10,16 @@ const sections = document.querySelectorAll(
   "main section[id]"
 );
 
+const newsSection = document.querySelector("#news");
+const newsList = document.querySelector(".news-list");
+const newsDetails = document.querySelector(".news-details");
+const newsDetailArticles = document.querySelectorAll("[data-news-detail]");
+const newsLinks = document.querySelectorAll("[data-news-link]");
+const newsBackButtons = document.querySelectorAll("[data-news-back]");
+
+const NEWS_SCROLL_KEY = "anceshyeon-news-scroll-y";
+let newsListScrollY = Number(sessionStorage.getItem(NEWS_SCROLL_KEY)) || 0;
+
 
 /* --------------------------------------------------
    헤더 그림자
@@ -48,6 +58,100 @@ function updateActiveNavigation() {
     }
   });
 }
+
+
+/* --------------------------------------------------
+   뉴스 목록과 상세 화면 전환
+-------------------------------------------------- */
+function getNewsArticleId() {
+  const match = window.location.hash.match(/^#news\/([^/]+)$/);
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
+function showNewsList(restoreScroll = false) {
+  if (!newsList || !newsDetails) return;
+
+  newsList.hidden = false;
+  newsDetails.hidden = true;
+  newsDetailArticles.forEach((article) => {
+    article.hidden = true;
+  });
+
+  if (restoreScroll) {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: newsListScrollY, behavior: "auto" });
+      });
+    });
+  }
+}
+
+function showNewsArticle(articleId) {
+  if (!newsList || !newsDetails || !newsSection) return;
+
+  const article = document.querySelector(
+    `[data-news-detail="${CSS.escape(articleId)}"]`
+  );
+
+  if (!article) {
+    showNewsList();
+    return;
+  }
+
+  newsList.hidden = true;
+  newsDetails.hidden = false;
+  newsDetailArticles.forEach((item) => {
+    item.hidden = item !== article;
+  });
+
+  const headerHeight = header ? header.offsetHeight : 0;
+  window.scrollTo({
+    top: newsSection.offsetTop - headerHeight,
+    behavior: "auto"
+  });
+}
+
+function handleNewsRoute() {
+  const articleId = getNewsArticleId();
+
+  if (articleId) {
+    showNewsArticle(articleId);
+  } else {
+    const wasShowingArticle = newsDetails && !newsDetails.hidden;
+    showNewsList(wasShowingArticle);
+  }
+
+  updateActiveNavigation();
+}
+
+newsLinks.forEach((link) => {
+  link.addEventListener("click", (event) => {
+    event.preventDefault();
+    newsListScrollY = window.scrollY;
+    sessionStorage.setItem(NEWS_SCROLL_KEY, String(newsListScrollY));
+
+    window.history.replaceState(null, "", "#news");
+    window.history.pushState(
+      { newsArticle: link.dataset.newsLink },
+      "",
+      link.getAttribute("href")
+    );
+    handleNewsRoute();
+  });
+});
+
+newsBackButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    if (window.history.state?.newsArticle) {
+      window.history.back();
+    } else {
+      window.location.hash = "news";
+    }
+  });
+});
+
+window.addEventListener("hashchange", handleNewsRoute);
+window.addEventListener("popstate", handleNewsRoute);
 
 
 /* --------------------------------------------------
@@ -110,4 +214,5 @@ window.addEventListener("resize", () => {
 window.addEventListener("DOMContentLoaded", () => {
   updateHeader();
   updateActiveNavigation();
+  handleNewsRoute();
 });
