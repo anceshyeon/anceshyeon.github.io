@@ -511,7 +511,7 @@ h1, h2, h3 {
 
 .news-gallery {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
 }
 
@@ -521,21 +521,26 @@ h1, h2, h3 {
 }
 
 .news-gallery-spaceai > img:nth-child(-n + 2) {
-  aspect-ratio: auto;
-  object-fit: contain;
+  aspect-ratio: 6 / 7;
+  object-fit: cover;
+  object-position: center bottom;
 }
 
 .news-gallery-row {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
   gap: 16px;
-  height: auto;
+  grid-column: 1 / -1;
+  height: clamp(420px, 52vw, 500px);
 }
 
 .news-gallery-row img {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
+  height: 100%;
+  object-fit: cover;
+}
+
+.news-gallery-row img:first-child {
+  object-position: left center;
 }
 
 .news-gallery-single {
