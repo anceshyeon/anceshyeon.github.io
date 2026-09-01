@@ -567,10 +567,15 @@ h1, h2, h3 {
   margin: 0 auto;
   padding: 30px 28px;
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 20px;
   color: var(--muted);
   font-size: 14px;
+}
+
+.footer-social {
+  margin-top: 0;
 }
 
 /* ABOUT */
@@ -820,6 +825,10 @@ h1, h2, h3 {
 
   .footer-wrap {
     flex-direction: column;
+  }
+
+  .footer-social .social-label {
+    flex-basis: auto;
   }
 
   .single-page-section {
